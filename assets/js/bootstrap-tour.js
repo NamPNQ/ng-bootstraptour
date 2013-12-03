@@ -1,8 +1,8 @@
 angular.module("ui.bootstrap.tour", [])
-    /**
-     * A helper, internal data structure that acts as a map but also allows getting / removing
-     * elements in the LIFO order
-     */
+/**
+ * A helper, internal data structure that acts as a map but also allows getting / removing
+ * elements in the LIFO order
+ */
     .factory('$$stackedMap', function () {
         return {
             createNew: function () {
@@ -52,16 +52,50 @@ angular.module("ui.bootstrap.tour", [])
             }
         };
     })
+    .factory('$tour', function () {
+        var $tourProvider = {
+            options: {
+                name: "tour",
+                container: "body",
+                keyboard: true,
+                storage: window.localStorage,
+                debug: false,
+                backdrop: false,
+                redirect: true,
+                orphan: false,
+                basePath: "",
+                template: "<div class='popover'>          <div class='arrow'></div>          <h3 class='popover-title'></h3>          <div class='popover-content'></div>          <div class='popover-navigation'>            <div class='btn-group'>              <button class='btn btn-sm btn-default' data-role='prev'>&laquo; Prev</button>              <button class='btn btn-sm btn-default' data-role='next'>Next &raquo;</button>            </div>            <button class='btn btn-sm btn-default' data-role='end'>End tour</button>          </div>        </div>",
+                afterSetState: function (key, value) {
+                },
+                afterGetState: function (key, value) {
+                },
+                afterRemoveState: function (key) {
+                },
+                onStart: function (tour) {
+                },
+                onEnd: function (tour) {
+                },
+                onShow: function (tour) {
+                },
+                onShown: function (tour) {
+                },
+                onHide: function (tour) {
+                },
+                onHidden: function (tour) {
+                },
+                onNext: function (tour) {
+                },
+                onPrev: function (tour) {
+                }
 
-    .controller("TourController", ["$scope", function ($scope) {
-    }])
-    .directive('tour', [function () {
-        return {
-            restrict: 'EA',
-            controller: 'TourController',
-            require: 'tour',
-            scope: {
-                options: '='
-            }
+            },
+            $get:['$injector', '$rootScope', '$q', '$http', '$templateCache', '$controller', '$tourStack',
+                function ($injector, $rootScope, $q, $http, $templateCache, $controller, $modalStack) {
+                    var $tour = {};
+                    $tour.Tour = function(tourOptions){
+                        tourOptions = angular.extend({},$tourProvider.options,tourOptions);
+                    };
+                }]
         };
-    }])
+        return $tourProvider
+    })
